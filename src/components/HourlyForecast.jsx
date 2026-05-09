@@ -2,14 +2,7 @@ import React from 'react';
 import HourlyCard from './HourlyCard';
 import { useState } from 'react';
 import DaysList from './DaysList';
-import fogIcon from '../assets/images/icon-fog.webp'; 
-import overcastIcon from '../assets/images/icon-overcast.webp';
-import partlyCloudyIcon from '../assets/images/icon-partly-cloudy.webp';  
-import rainIcon from '../assets/images/icon-rain.webp'; 
-import snowIcon from '../assets/images/icon-snow.webp'; 
-import stormIcon from '../assets/images/icon-storm.webp'; 
-import sunIcon from '../assets/images/icon-sunny.webp';
-import drizzleIcon from '../assets/images/icon-drizzle.webp';
+import { getWeatherIcon } from '../utils/WeatherUtils'
 import dropDownIcon from '../assets/images/icon-dropdown.svg';
 
 const HourlyForecast = ({data}) => {
@@ -20,31 +13,7 @@ const HourlyForecast = ({data}) => {
         setShowDropdown(!showDropdown)
     }
 
-    const getWeatherIcon = (weatherCode) => {
-          switch(true) {
-              case weatherCode === 0:
-                  return sunIcon           // clear sky
-              case weatherCode <= 3:
-                  return overcastIcon      // partly cloudy to overcast
-              case weatherCode <= 48:
-                  return fogIcon           // fog
-              case weatherCode <= 57:
-                  return drizzleIcon       // drizzle
-              case weatherCode <= 67:
-                  return rainIcon          // rain
-              case weatherCode <= 77:
-                  return snowIcon          // snow
-              case weatherCode <= 82:
-                  return rainIcon          // rain showers
-              case weatherCode <= 86:
-                  return snowIcon          // snow showers
-              case weatherCode <= 99:
-                  return stormIcon         // thunderstorm
-              default:
-                  return sunIcon           // fallback
-            }
-     }
-
+    
     const dailyForecasts = data?.daily?.time?.map((date, index) => ({
         id: index,
         day: new Date(date).toLocaleDateString('en-US', { weekday: 'long' }),
@@ -58,14 +27,15 @@ const HourlyForecast = ({data}) => {
         time: time,
         hour: new Date(time).toLocaleTimeString('en-US', { hour: 'numeric', hour12: true }),
         temp: `${data.hourly.temperature_2m[index]}°`,
-        icon: sunIcon  // default icon for now since no hourly weather code
-    })) .filter((hour) => hour.time.startsWith(selectedDay ?? data?.daily?.time?.[0]))
+        icon: getWeatherIcon(data.hourly.weather_code[index])  
+    }))
+    .filter((hour) => hour.time.startsWith(selectedDay ?? data?.daily?.time?.[0]))
     ?? []
 
     const handleDaySelect = (date) => {
     setSelectedDay(date)
     setShowDropdown(false)  // close dropdown after selection
-}
+  }
 
 
   return (
