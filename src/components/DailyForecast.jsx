@@ -9,16 +9,42 @@ import stormIcon from '../assets/images/icon-storm.webp';
 import sunIcon from '../assets/images/icon-sunny.webp';
 import drizzleIcon from '../assets/images/icon-drizzle.webp';
 
-const DailyForecast = () => {
-    const forecasts = [
-        { id: 2, day: 'Tuesday', currtemp: '20°', pretemp: '14°' ,  icon: rainIcon },
-        { id: 3, day: 'Wednesday', currtemp: '21°', pretemp: '15°' , icon: drizzleIcon },
-        { id: 4, day: 'Thursday', currtemp: '24°', pretemp: '14°', icon: sunIcon },
-        { id: 5, day: 'Friday', currtemp: '25°', pretemp: '13°', icon: partlyCloudyIcon },
-        { id: 6, day: 'Sartuday', currtemp: '21°', pretemp: '15°', icon: stormIcon },
-        { id: 7, day: 'Sunday', currtemp: '25°', pretemp: '16°', icon: snowIcon },
-        { id: 1, day: 'Monday', currtemp: '24°', pretemp: '15°' , icon: fogIcon },
-    ]
+const DailyForecast = ({data}) => {
+  
+    const getWeatherIcon = (weatherCode) => {
+      switch(true) {
+          case weatherCode === 0:
+              return sunIcon           // clear sky
+          case weatherCode <= 3:
+              return overcastIcon      // partly cloudy to overcast
+          case weatherCode <= 48:
+              return fogIcon           // fog
+          case weatherCode <= 57:
+              return drizzleIcon       // drizzle
+          case weatherCode <= 67:
+              return rainIcon          // rain
+          case weatherCode <= 77:
+              return snowIcon          // snow
+          case weatherCode <= 82:
+              return rainIcon          // rain showers
+          case weatherCode <= 86:
+              return snowIcon          // snow showers
+          case weatherCode <= 99:
+              return stormIcon         // thunderstorm
+          default:
+              return sunIcon           // fallback
+        }
+      }
+    
+    const forecasts = data?.daily?.time?.map((date, index) => ({
+    id: index,
+    day: new Date(date).toLocaleDateString('en-US', { weekday: 'long' }),
+    maxTemp: `${data.daily.temperature_2m_max[index]}°`,
+    minTemp: `${data.daily.temperature_2m_min[index]}°`,
+    icon: getWeatherIcon(data.daily.weather_code[index])
+  })) ?? []
+
+  
 
   return (
     <div className='md:col-span-2 md:row-start-3 flex  flex-col space-y-3  '>
@@ -28,7 +54,7 @@ const DailyForecast = () => {
 
             <div className='flex flex-wrap gap-4 items-center justify-center md:justify-start'>
              {forecasts.map((forecast) => (
-                <ForecastCard  key={forecast.id} day={forecast.day} currtemp={forecast.currtemp} pretemp={forecast.pretemp} icon={forecast.icon}/>
+                <ForecastCard  key={forecast.id} day={forecast.day} currtemp={forecast.maxTemp} pretemp={forecast.minTemp} icon={forecast.icon}/>
              ))}
                 
             </div>

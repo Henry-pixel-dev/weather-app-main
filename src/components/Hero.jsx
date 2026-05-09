@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useOutletContext } from 'react-router-dom'
 import searchIcon from '../assets/images/icon-search.svg';
 import SearchingState from './SearchingState';
@@ -7,19 +7,30 @@ import SearchLists from './SearchLists';
 
 
 const Hero = ({ onSearch }) => {
-  const { loading, searchHistory} = useOutletContext();
+  const { loading } = useOutletContext();
   const [city, setCity] = useState('')
   const [showDropdown, setShowDropdown] = useState(false);
-  // console.log('searchlistCity', searchHistory)
-
 
   const submitForm = (e) => {
     e.preventDefault()
     setShowDropdown(false)
     onSearch(city)
   }
-  
 
+  const handleHistoryClick = (cityName) => {
+    setCity(cityName)
+    setShowDropdown(false)
+    onSearch(cityName)
+  }
+
+  const handleInputFocus = () => {
+    setShowDropdown(true)
+  }
+
+  const handleInputBlur = () => {
+    // Delay hiding to allow click on dropdown items
+    setTimeout(() => setShowDropdown(false), 150)
+  }
 
   return (
     <>
@@ -34,12 +45,12 @@ const Hero = ({ onSearch }) => {
             <input type="text" placeholder='Search for a place...' className='bg-transparent w-full text-neutral-200 focus:outline-none ml-5'
             value={city}
             onChange={(e) => setCity(e.target.value)}
-            onFocus={() => setShowDropdown(true)}   // when user clicks in
-            onBlur={() => setShowDropdown(false)} 
+            onFocus={handleInputFocus}
+            onBlur={handleInputBlur}
             />
           </div>
-          {showDropdown && <SearchLists />}
-          {loading && <SearchingState history={searchHistory}/>}
+          {showDropdown && <SearchLists onSearch={handleHistoryClick} />}
+          {loading && <SearchingState />}
         </div>
         <button className='flex-1 bg-blue-500 text-neutral-200 px-5 py-2 rounded-lg max-h-[68px]'
         type='submit'>

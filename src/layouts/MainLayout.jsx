@@ -39,6 +39,7 @@ const MainLayout = () => {
         })
         setSearchHistory(prev => [...new Set([...prev, cityName])]);
         } catch (error) {
+          navigate('/error')
           console.log(error)
         } finally {
           setLoading(false)
