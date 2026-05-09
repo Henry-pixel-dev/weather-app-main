@@ -62,7 +62,10 @@ const HourlyForecast = ({data}) => {
     })) .filter((hour) => hour.time.startsWith(selectedDay ?? data?.daily?.time?.[0]))
     ?? []
 
-    
+    const handleDaySelect = (date) => {
+    setSelectedDay(date)
+    setShowDropdown(false)  // close dropdown after selection
+}
 
 
   return (
@@ -83,7 +86,7 @@ const HourlyForecast = ({data}) => {
                 {showDropdown && (
                 <div className='absolute top-full right-0 mt-4 z-10  w-64 bg-neutral-800 p-3 rounded-md'>
                     {dailyForecasts.map((daily) => (
-                      <DaysList key={daily.id} day={daily} onSelectDay={setSelectedDay}/>
+                      <DaysList key={daily.id} day={daily} onSelectDay={handleDaySelect}/>
                     ))}
                 </div>
                 )}
