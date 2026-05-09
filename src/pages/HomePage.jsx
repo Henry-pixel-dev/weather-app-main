@@ -6,6 +6,7 @@ import CurrentWeather from '../components/CurrentWeather';
 import WeatherStats from '../components/WeatherStats';
 import DailyForecast from '../components/DailyForecast';
 import HourlyForecast from '../components/HourlyForecast';
+import LoadingSkeleton from '../components/LoadingSkeleton';
 
 
 const HomePage = ({ onSearch }) => {
@@ -15,12 +16,15 @@ const HomePage = ({ onSearch }) => {
   return (
     <>
       <Hero  onSearch={fetchWeather} />
-      <GridLayout>
-        <CurrentWeather data={weatherData} />
-        <WeatherStats  data={weatherData}/>   
-        <DailyForecast data={weatherData} />
-        <HourlyForecast  data={weatherData}/>
-      </GridLayout>
+      {!weatherData ? <LoadingSkeleton /> : (
+        <GridLayout>
+          <CurrentWeather data={weatherData} />
+          <WeatherStats  data={weatherData}/>   
+          <DailyForecast data={weatherData} />
+          <HourlyForecast  data={weatherData}/>
+        </GridLayout>
+      )}
+      
     </>
   )
 }
