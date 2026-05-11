@@ -1,18 +1,18 @@
 import React from 'react'
 import ForecastCard from './ForecastCard';
-import { getWeatherIcon } from '../utils/WeatherUtils'
+import { getWeatherIcon, convertTemp } from '../utils/WeatherUtils';
 
-const DailyForecast = ({data}) => {
-  
-    
-    
-    const forecasts = data?.daily?.time?.map((date, index) => ({
+
+const DailyForecast = ({data, unit}) => {
+
+
+  const forecasts = data?.daily?.time?.map((date, index) => ({
     id: index,
     day: new Date(date).toLocaleDateString('en-US', { weekday: 'long' }),
-    maxTemp: `${data.daily.temperature_2m_max[index]}°`,
-    minTemp: `${data.daily.temperature_2m_min[index]}°`,
+    maxTemp: convertTemp(data.daily.temperature_2m_max[index], unit),
+    minTemp: convertTemp(data.daily.temperature_2m_min[index], unit),
     icon: getWeatherIcon(data.daily.weather_code[index])
-  })) ?? []
+})) ?? []
 
   
 

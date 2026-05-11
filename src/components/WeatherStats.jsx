@@ -1,13 +1,15 @@
 import React from 'react'
 import StatCard from './StatCard';
+import { convertTemp, convertWind, convertPrecipitation } from '../utils/weatherUtils'
 
-const WeatherStats = ({data}) => {
+const WeatherStats = ({data, unit}) => {
+    
     const stats = [
-    { id: 1, label: 'Feels like', value: `${data?.current?.temperature_2m ?? '--'}°` },
+    { id: 1, label: 'Feels like', value: convertTemp(data?.current?.temperature_2m, unit) },
     { id: 2, label: 'Humidity', value: `${data?.current?.relative_humidity_2m ?? '--'}%` },
-    { id: 3, label: 'Winds', value: `${data?.current?.wind_speed_10m ?? '--'} km/h` },
-    { id: 4, label: 'Precipitation', value: `${data?.current?.precipitation ?? '--'} mm`},
-  ]
+    { id: 3, label: 'Winds', value: convertWind(data?.current?.wind_speed_10m, unit) },
+    { id: 4, label: 'Precipitation', value: convertPrecipitation(data?.current?.precipitation, unit) },
+]
  
     
     

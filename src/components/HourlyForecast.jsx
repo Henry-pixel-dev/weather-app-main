@@ -2,10 +2,10 @@ import React from 'react';
 import HourlyCard from './HourlyCard';
 import { useState } from 'react';
 import DaysList from './DaysList';
-import { getWeatherIcon } from '../utils/WeatherUtils'
+import { getWeatherIcon, convertTemp } from '../utils/WeatherUtils'
 import dropDownIcon from '../assets/images/icon-dropdown.svg';
 
-const HourlyForecast = ({data}) => {
+const HourlyForecast = ({data, unit}) => {
     const [showDropdown, setShowDropdown] = useState(false);
     const [selectedDay, setSelectedDay] = useState(data?.daily?.time?.[0])
 
@@ -26,7 +26,7 @@ const HourlyForecast = ({data}) => {
         id: index,
         time: time,
         hour: new Date(time).toLocaleTimeString('en-US', { hour: 'numeric', hour12: true }),
-        temp: `${data.hourly.temperature_2m[index]}°`,
+        temp: convertTemp(data.hourly.temperature_2m[index], unit),
         icon: getWeatherIcon(data.hourly.weather_code[index])  
     }))
     .filter((hour) => hour.time.startsWith(selectedDay ?? data?.daily?.time?.[0]))

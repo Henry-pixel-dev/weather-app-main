@@ -2,12 +2,14 @@ import React from 'react'
 import { useState, useEffect } from 'react';
 import todayLarge from '../assets/images/bg-today-large.svg';
 import todaysmall from '../assets/images/bg-today-small.svg';
-import { getWeatherIcon } from '../utils/WeatherUtils'
+import { getWeatherIcon,  convertTemp} from '../utils/WeatherUtils'
 
 
-const CurrentWeather = ({ data }) => {
+const CurrentWeather = ({ data, unit }) => {
 
-    const temperature = data?.current?.temperature_2m ?? '--'
+    const temperature = data?.current?.temperature_2m 
+    ? convertTemp(data.current.temperature_2m, unit) 
+    : '--'
     const weatherCode = data?.current?.weather_code ?? 0;
     const city = data?.city ?? 'Berlin'
     const country = data?.country ?? 'Germany'
@@ -49,7 +51,7 @@ const CurrentWeather = ({ data }) => {
             <div className='flex flex-row justify-between items-center space-x-5'>
                 <img src={getWeatherIcon(weatherCode)}  alt="" className='h-32 w-32'/>
                 <p className='text-neutral-0 text-center text-7xl font-bold italic'>
-                  {temperature}°
+                  {temperature}
                 </p>
             </div>
         </div>

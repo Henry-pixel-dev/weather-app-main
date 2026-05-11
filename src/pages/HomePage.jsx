@@ -10,7 +10,7 @@ import LoadingSkeleton from '../components/LoadingSkeleton';
 
 
 const HomePage = ({ onSearch }) => {
-  const { fetchWeather, weatherData, loading  } = useOutletContext()
+  const { fetchWeather, weatherData, loading, unit  } = useOutletContext()
   
 
   return (
@@ -18,10 +18,10 @@ const HomePage = ({ onSearch }) => {
       <Hero  onSearch={fetchWeather} />
       {!weatherData ? <LoadingSkeleton /> : (
         <GridLayout>
-          <CurrentWeather data={weatherData} />
-          <WeatherStats  data={weatherData}/>   
-          <DailyForecast data={weatherData} />
-          <HourlyForecast  data={weatherData}/>
+          <CurrentWeather data={weatherData} unit={unit}/>
+          <WeatherStats  data={weatherData} unit={unit}/>   
+          <DailyForecast data={weatherData} unit={unit}/>
+          <HourlyForecast  data={weatherData} unit={unit}/>
         </GridLayout>
       )}
       

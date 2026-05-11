@@ -8,6 +8,7 @@ const MainLayout = () => {
     const [weatherData, setWeatherData] = useState(null);
     const [loading, setLoading] = useState(false)
     const [searchHistory, setSearchHistory] = useState([]);
+    const [unit, setUnit] = useState('metric')
 
     const fetchWeather = async (city) => {
       setLoading(true)
@@ -47,8 +48,8 @@ const MainLayout = () => {
     }
   return (
     <>
-      <NavBar />
-      <Outlet  context={{ fetchWeather, weatherData, loading, searchHistory }}/>
+      <NavBar  setUnit={setUnit} unit={unit}/>
+      <Outlet  context={{ fetchWeather, weatherData, loading, searchHistory, unit }}/>
     </>
   )
 }
